@@ -34,14 +34,18 @@ jobs:
       - name: Push Docker image to Docker Hub prod
         if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
         run: |
-          docker build -t techvaibhav377/prod:${{ github.sha }} .
-          docker push techvaibhav377/prod:${{ github.sha }}
+          docker build -t ${{ inputs.docker_repo_prod }}:${{ github.sha }} .
+          docker push ${{ inputs.docker_repo_prod }}:${{ github.sha }}
+          docker tag ${{ inputs.docker_repo_prod }}:${{ github.sha }} ${{ inputs.docker_repo_prod }}:latest
+          docker push ${{ inputs.docker_repo_prod }}:latest
 
       - name: Push Docker image to Docker Hub dev
         if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
         run: |
-          docker build -t techvaibhav377/dev:${{ github.sha }} .
-          docker push techvaibhav377/dev:${{ github.sha }}
+          docker build -t ${{ inputs.docker_repo_dev }}:${{ github.sha }} .
+          docker push ${{ inputs.docker_repo_dev }}:${{ github.sha }}
+          docker tag ${{ inputs.docker_repo_dev }}:${{ github.sha }} ${{ inputs.docker_repo_dev }}:latest
+          docker push ${{ inputs.docker_repo_dev }}:latest
 
       - name: Logout from DockerHub
         run: docker logout
