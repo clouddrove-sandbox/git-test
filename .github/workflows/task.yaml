@@ -13,19 +13,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    
       - name: Log in to DockerHub
-        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Push Docker image to Docker Hub prod
         if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
-        run:  docker build -t techvaibhav377/prod:${{ github.sha }} .
-              docker push techvaibhav377/prod:${{ github.sha }} /techvaibhav377/prod
+        run: |
+          docker build -t techvaibhav377/prod:${{ github.sha }} .
+          docker push techvaibhav377/prod:${{ github.sha }}
 
       - name: Push Docker image to Docker Hub dev
         if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
-        run:  docker build -t techvaibhav377/dev:${{ github.sha }} .
-              docker push techvaibhav377/dev:${{ github.sha }} /techvaibhav377/dev
+        run: |
+          docker build -t techvaibhav377/dev:${{ github.sha }} .
+          docker push techvaibhav377/dev:${{ github.sha }}
 
       - name: Logout from DockerHub
         run: docker logout
