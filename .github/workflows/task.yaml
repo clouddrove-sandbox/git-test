@@ -7,6 +7,21 @@ on:
       - dev
   pull_request:
     types: [closed]
+  workflow_call:
+    inputs:
+      docker_repo_dev:
+        description: 'Docker repository for development'
+        required: true
+        type: string
+      docker_repo_prod:
+        description: 'Docker repository for production'
+        required: true
+        type: string
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: true
+      DOCKERHUB_TOKEN:
+        required: true
 
 jobs:
   build-and-push:
