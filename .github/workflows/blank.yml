@@ -1,0 +1,26 @@
+name: hello-world workflow
+
+on:
+  push:
+    branches:
+      - master  
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Apache HTTP Server
+        run: sudo apt-get install apache2 -y
+
+      - name: Copy index.html to Apache directory
+        run: sudo cp index.html /var/www/html/
+
+      - name: Start Apache HTTP Server
+        run: sudo systemctl start apache2
+
+      - name: Verify Apache HTTP Server status
+        run: sudo systemctl status apache2
