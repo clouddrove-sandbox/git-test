@@ -1,9 +1,11 @@
+# .github/workflows/task.yaml
+
 name: Docker Image Build and Push
 
 on:
   push:
     branches:
-      - master  
+      - master
       - dev
   pull_request:
     types: [closed]
